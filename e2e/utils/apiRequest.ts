@@ -1,7 +1,7 @@
 import request from "supertest";
 
 export class ApiRequest {
-  constructor(private _baseUrl: string) {}
+  constructor(private baseUrl: string) {}
 
   private logError(error: any): void {
     console.error("[API Request] Error:", error);
@@ -17,95 +17,81 @@ export class ApiRequest {
     }
   }
 
-  private createRequest(method: string, url: string) {
-    return request(this._baseUrl)[method.toLowerCase()](url); // Method can be "GET", "POST", "PUT", etc.
+  private createRequest(url: string) {
+    return request(this.baseUrl).get(url); // Default to GET request
   }
 
-  private addAuthHeader(req: request.Test, accessToken?: string) {
-    if (accessToken) {
-      return req.set("Authorization", `Bearer ${accessToken}`);
-    }
-    return req;
+  private addAuthHeader(req: request.Test, accessToken: string) {
+    return req.set("Authorization", `Bearer ${accessToken}`);
   }
 
-  private addHeaders(req: request.Test, headers?: Record<string, string>) {
+  async post(url: string, data: any, headers?: Record<string, string>) {
+    const req = request(this.baseUrl).post(url);
+
     if (headers) {
       req.set(headers);
     }
-  }
 
-  private sendData(req: request.Test, data?: any) {
     if (data) {
       req.send(data);
     }
-  }
 
-  async post(
-    url: string,
-    data?: any,
-    accessToken?: string,
-    headers?: Record<string, string>
-  ) {
-    let req = this.createRequest("POST", url);
-    req = this.addAuthHeader(req, accessToken);
-    this.addHeaders(req, headers);
-    this.sendData(req, data);
     return await this.sendRequest(req);
   }
 
-  async get(
-    url: string,
-    accessToken?: string,
-    query?: Record<string, string>,
-    headers?: Record<string, string>
-  ) {
-    let req = this.createRequest("GET", url);
+  async get(url: string, accessToken: string, query?: Record<string, string>) {
+    let req = this.createRequest(url);
+
     req = this.addAuthHeader(req, accessToken);
-    this.addHeaders(req, headers);
+
     if (query) {
       req = req.query(query);
     }
+
     return await this.sendRequest(req);
   }
 
-  async put(
-    url: string,
-    data?: any,
-    accessToken?: string,
-    headers?: Record<string, string>
-  ) {
-    let req = this.createRequest("PUT", url);
-    req = this.addAuthHeader(req, accessToken);
-    this.addHeaders(req, headers);
-    this.sendData(req, data);
+  async put(url: string, data: any, headers?: Record<string, string>) {
+    const req = request(this.baseUrl).put(url);
+
+    if (headers) {
+      req.set(headers);
+    }
+
+    if (data) {
+      req.send(data);
+    }
+
     return await this.sendRequest(req);
   }
 
-  async patch(
-    url: string,
-    data?: any,
-    accessToken?: string,
-    headers?: Record<string, string>
-  ) {
-    let req = this.createRequest("PATCH", url);
-    req = this.addAuthHeader(req, accessToken);
-    this.addHeaders(req, headers);
-    this.sendData(req, data);
+  async patch(url: string, data: any, headers?: Record<string, string>) {
+    const req = request(this.baseUrl).patch(url);
+
+    if (headers) {
+      req.set(headers);
+    }
+
+    if (data) {
+      req.send(data);
+    }
+
     return await this.sendRequest(req);
   }
 
   async delete(
     url: string,
-    accessToken?: string,
-    query?: Record<string, string>,
-    headers?: Record<string, string>
+    accessToken: string,
+    query?: Record<string, string>
   ) {
-    let req = this.createRequest("DELETE", url);
-    req = this.addAuthHeader(req, accessToken);
-    this.addHeaders(req, headers);
+    let req = request(this.baseUrl)
+      .delete(url)
+      .set("Authorization", `Bearer ${accessToken}`);
+
     if (query) {
       req = req.query(query);
     }
-    return await this.sendRequest(req);
+
+    return await req;
   }
 }
