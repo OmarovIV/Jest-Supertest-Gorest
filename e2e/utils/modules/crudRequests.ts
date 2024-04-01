@@ -35,4 +35,8 @@ export class CrudActions {
       { Authorization: `Bearer ${accessToken}` }
     );
   }
+
+  async deleteUser(accessToken: string, userId: string) {
+    return this.apiRequest.delete(`/public/v2/users/${userId}`, accessToken);
+  }
 }

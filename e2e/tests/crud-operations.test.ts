@@ -240,6 +240,43 @@ describe("CRUD tests for gorest", () => {
     expect(getUserResponse.body.gender).toEqual("female");
     expect(getUserResponse.body.status).toEqual("inactive");
   });
+
+  it("Admin creates a user and deletes a user after it", async () => {
+    const { randomName, randomEmail } = generateRandomUserData();
+    const createUserResponse = await createUser(
+      accessToken,
+      randomName,
+      "male",
+      randomEmail,
+      "active"
+    );
+    expect(createUserResponse.status).toEqual(201);
+    expect(createUserResponse.body.id).toBeTruthy();
+
+    const userId = createUserResponse.body.id;
+
+    const deleteUserResponse = await testBricks.crudActions.deleteUser(
+      accessToken,
+      userId
+    );
+    expect(deleteUserResponse.status).toEqual(204);
+
+    const getUserResponse = await testBricks.crudActions.getUser(
+      accessToken,
+      userId
+    );
+    expect(getUserResponse.status).toEqual(404);
+  });
+
+  it("Admin tries to delete non-existing user", async () => {
+    const userId = "0000000";
+
+    const deleteUserResponse = await testBricks.crudActions.deleteUser(
+      accessToken,
+      userId
+    );
+    expect(deleteUserResponse.status).toEqual(404);
+  });
 });
 
 function generateRandomUserData() {
