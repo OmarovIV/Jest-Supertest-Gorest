@@ -16,6 +16,14 @@ jobs:
     timeout-minutes: 5
 
     steps:
+      - name: Clear Cache
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Checkout Repository
         uses: actions/checkout@v3
 
