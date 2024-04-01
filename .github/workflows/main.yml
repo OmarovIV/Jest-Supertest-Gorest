@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v2.4.3
 
       - name: Display Node.js version and npm version
         run: |
@@ -25,9 +25,9 @@ jobs:
           npm --version
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v3.3.0
         with:
-          node-version: 18.16.0
+          node-version: 20.x
 
       - name: Install Dependencies
         run: npm install
