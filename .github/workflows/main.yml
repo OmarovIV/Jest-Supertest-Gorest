@@ -1,0 +1,48 @@
+name: Node.js CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: "0 6 * * 2" # Schedule for every second Tuesday at 6 a.m.
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Display Node.js version and npm version
+        run: |
+          node --version
+          npm --version
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.16.0
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Tests
+        run: npm test
+
+      - name: Generate Report
+        run: npm run test:report
+
+      - name: Upload Report as Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-report
+          path: ./test-report.html
+
+env:
+  ACCESS_TOKEN: ${{ secrets.ACCESS_TOKEN }}
