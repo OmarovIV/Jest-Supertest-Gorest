@@ -13,6 +13,7 @@ Setup Instructions:
 5. Install project dependencies by running the command:
 
 npm install
+npm install cross-env
 
 6. After setting up the environment and installing dependencies, run the tests using the following command:
 
