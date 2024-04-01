@@ -25,7 +25,7 @@ jobs:
             ${{ runner.os }}-node-
 
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Display Node.js version and npm version
         run: |
