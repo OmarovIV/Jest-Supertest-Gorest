@@ -17,7 +17,7 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2.4.3
+        uses: actions/checkout@v2
 
       - name: Display Node.js version and npm version
         run: |
