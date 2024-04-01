@@ -17,6 +17,3 @@ export function generateRandomEmail(): string {
   const randomString = Math.random().toString(36).substr(2, 5);
   return `${randomString}@${randomDomain}`;
 }
-
-export const randomName = generateRandomName();
-export const randomEmail = generateRandomEmail();

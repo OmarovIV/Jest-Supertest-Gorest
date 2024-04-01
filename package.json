@@ -241,8 +241,8 @@
   "scripts": {
     "test": "cross-env ENV=${ENV:-default} jest",
     "test:main": "cross-env ENV=main jest --watchAll",
-    "test:only": "cross-env ENV=sandbox jest -i tests -t \"only\"",
-    "test:report": "open test-report.html || start test-report.html"
+    "test:only": "cross-env ENV=main jest -i tests -t \"only\"",
+    "test:report": "start test-report.html"
   },
   "repository": {
     "type": "git",

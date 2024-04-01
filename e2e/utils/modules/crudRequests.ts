@@ -16,4 +16,23 @@ export class CrudActions {
       { Authorization: `Bearer ${accessToken}` }
     );
   }
+
+  async getUser(accessToken: string, userId: string) {
+    return this.apiRequest.get(`/public/v2/users/${userId}`, accessToken);
+  }
+
+  async updateUserDetails(
+    accessToken: string,
+    userId: string,
+    name?: string,
+    gender?: string,
+    email?: string,
+    status?: string
+  ) {
+    return this.apiRequest.patch(
+      `/public/v2/users/${userId}`,
+      { name, gender, email, status },
+      { Authorization: `Bearer ${accessToken}` }
+    );
+  }
 }
